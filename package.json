@@ -1,0 +1,72 @@
+{
+  "name": "react-native-face-recognition",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "A toolbox for your React Native app localization.",
+  "author": "Mathieu Acthernoene <zoontek@gmail.com>",
+  "homepage": "https://github.com/zoontek/react-native-localize",
+  "types": "lib/index.d.ts",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "/android",
+    "lib/commonjs",
+    "lib/module",
+    "lib/typescript",
+    "/ios",
+    "/mock",
+    "/src",
+    "RNFaceAISDK.podspec",
+    "package.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zoontek/react-native-localize.git"
+  },
+  "keywords": [
+    "react-native-face-recognition",
+    "react-native",
+    "react-native-macos",
+    "face",
+    "localization",
+    "l20n"
+  ],
+  "scripts": {
+    "format": "prettier '**/*' -u -w",
+    "typecheck": "tsc --noEmit",
+    "prepack": "prettier '**/*' -u -c && yarn typecheck && yarn build",
+    "clean": "del /q dist 2>nul || rmdir /s /q dist",
+    "build": "npm run clean && npx tsc"
+  },
+
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ]
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@types/jest": "^29.5.13",
+    "@types/react": "^19.1.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "react": "19.1.0",
+    "react-native": "0.80.1",
+    "typescript": "^5.8.3"
+  },
+  "codegenConfig": {
+    "name": "RNFaceAISDK",
+    "type": "modules",
+    "jsSrcsDir": "./src",
+    "android": {
+      "javaPackageName": "com.faceai"
+    }
+  }
+}

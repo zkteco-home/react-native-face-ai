@@ -1,0 +1,79 @@
+buildscript {
+    ext {
+        // 使用官方发布的版本，例如 8.4
+        gradleVersion = '8.11.1'
+    }
+    ext.safeExtGet = {prop, fallback ->
+        rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    }
+    repositories {
+        google()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${safeExtGet("kotlinVersion", "2.1.20")}")
+        classpath("com.android.tools.build:gradle:$gradleVersion")
+    }
+}
+
+def isNewArchitectureEnabled() {
+    return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+if (isNewArchitectureEnabled()) {
+    apply plugin: "com.facebook.react"
+}
+
+android {
+    buildToolsVersion safeExtGet("buildToolsVersion", "35.0.0")
+    compileSdkVersion safeExtGet("compileSdkVersion", 36)
+
+    if (project.android.hasProperty("namespace")) {
+        namespace "com.faceai"
+
+        buildFeatures {
+            buildConfig true
+        }
+        sourceSets {
+            main {
+                manifest.srcFile "src/main/AndroidManifestNew.xml"
+            }
+        }
+    }
+    defaultConfig {
+        buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString())
+        minSdkVersion safeExtGet("minSdkVersion", 24)
+        targetSdkVersion safeExtGet("targetSdkVersion", 35)
+    }
+    lintOptions {
+        abortOnError false
+    }
+    sourceSets {
+        main {
+            if (isNewArchitectureEnabled()) {
+                java.srcDirs += ["src/newarch"]
+            } else {
+                java.srcDirs += ["src/oldarch"]
+            }
+        }
+    }
+}
+
+repositories {
+    maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        url("$rootDir/../node_modules/react-native/android")
+    }
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    //noinspection GradleDynamicVersion
+    implementation "com.facebook.react:react-native:+" // From node_modules
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.20"
+
+}
