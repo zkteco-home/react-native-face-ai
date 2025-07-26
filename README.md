@@ -31,9 +31,9 @@ It is supporting the **latest version**, and the **two previous minor series**.
 ## Setup
 
 ```bash
-$ npm install --save react-native-localize
+$ npm install --save react-native-face-recognition
 # --- or ---
-$ yarn add react-native-localize
+$ yarn add react-native-face-recognition
 
 
 ## API Usages
