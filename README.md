@@ -21,9 +21,6 @@ This repository demonstrates both `face liveness detection` and `face recognitio
 <br></br>
 
 
-## Install License
-The code below shows how to use the license: https://github.com/Faceplugin-ltd/FaceRecognition-React-Native/blob/0bd448a0b9c5128acd7dfc964afa144d34bd5ccf/example/src/MainPage.tsx#L23-L38
-Please [contact us](#contact) to get the license.
 
 
 ## Support
