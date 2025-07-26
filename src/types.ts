@@ -12,4 +12,7 @@ export interface FaceDetectionResult {
 export interface FaceRecognitionInterface {
   initializeSDK(config: InitConfig): Promise<string>;
   detectFace(imagePath: string): Promise<FaceDetectionResult>;
+  addFace(imagePath: string): Promise<FaceDetectionResult>;
+
 }
+

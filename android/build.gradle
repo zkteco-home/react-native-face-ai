@@ -1,7 +1,9 @@
 buildscript {
+
     ext {
         // 使用官方发布的版本，例如 8.4
         gradleVersion = '8.11.1'
+        compileSdk=36
     }
     ext.safeExtGet = {prop, fallback ->
         rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -12,7 +14,7 @@ buildscript {
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${safeExtGet("kotlinVersion", "2.1.20")}")
-        classpath("com.android.tools.build:gradle:$gradleVersion")
+        classpath("com.android.tools.build:gradle:${gradleVersion}")
     }
 }
 
@@ -22,6 +24,7 @@ def isNewArchitectureEnabled() {
 
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
+//apply plugin:"com.google.devtools.ksp:1.9.22-1.0.17"
 
 if (isNewArchitectureEnabled()) {
     apply plugin: "com.facebook.react"
@@ -30,23 +33,28 @@ if (isNewArchitectureEnabled()) {
 android {
     buildToolsVersion safeExtGet("buildToolsVersion", "35.0.0")
     compileSdkVersion safeExtGet("compileSdkVersion", 36)
+    compileSdk 36
+    buildFeatures {
+            buildConfig true
+            dataBinding true
+        }
 
     if (project.android.hasProperty("namespace")) {
-        namespace "com.faceai"
+        namespace "com.faceAI.demo"
 
-        buildFeatures {
-            buildConfig true
-        }
-        sourceSets {
+         sourceSets {
             main {
                 manifest.srcFile "src/main/AndroidManifestNew.xml"
             }
         }
     }
     defaultConfig {
-        buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString())
-        minSdkVersion safeExtGet("minSdkVersion", 24)
-        targetSdkVersion safeExtGet("targetSdkVersion", 35)
+        minSdk 24
+        targetSdk 35 //target SDK 还是28 的请参考question.md 文档说明
+
+        ndk {
+            abiFilters 'armeabi-v7a','arm64-v8a'   //chrome OS 暂时不支持了
+        }
     }
     lintOptions {
         abortOnError false
@@ -66,14 +74,59 @@ repositories {
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url("$rootDir/../node_modules/react-native/android")
+      
     }
     mavenCentral()
     google()
+
 }
+
+def camera_version = "1.4.2"
+configurations.configureEach {
+    resolutionStrategy {
+        //建议新工程升级到最新版本1.4.2 以上
+        force "androidx.camera:camera-core:$camera_version",
+                "androidx.camera:camera-camera2:$camera_version",
+                "androidx.camera:camera-lifecycle:$camera_version",
+                "androidx.camera:camera-view:$camera_version"
+    }
+}
+
 
 dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+" // From node_modules
     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.20"
+
+
+   //2025.07.15 发布2.0 系列正式版本
+    //2.x 版本SDK接入Demo源码及介绍：https://github.com/FaceAISDK/FaceAISDK_Android
+    implementation 'io.github.faceaisdk:Android:2025.07.15.Camera'
+
+    //UVC协议USB摄像头库 More: https://github.com/shiyinghan/UVCAndroid
+   // implementation files('libs/libuvccamera-release.aar')
+
+
+    // 以下为业务需要其他依赖，不是SDK 运行的必须依赖
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    //implementation 'com.github.princekin-f:EasyFloat:2.0.4'
+    api 'com.airbnb.android:lottie:6.0.0'
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.8'
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    //ksp("com.github.bumptech.glide:ksp:4.16.0")
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.recyclerview:recyclerview:1.3.2"
+
+  //  implementation 'com.tencent.bugly:crashreport:4.1.9.3'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    //选照片，用于静态人脸图相似度对比，使用详情见 https://github.com/javakam/FileOperator
+    implementation 'com.github.javakam:file.core:3.9.8@aar'      //核心库必选(Core library required)
+    implementation 'com.github.javakam:file.selector:3.9.8@aar'  //文件选择器(File selector)
+    implementation 'com.github.javakam:file.compressor:3.9.8@aar'//图片压缩,修改自Luban
 
 }
