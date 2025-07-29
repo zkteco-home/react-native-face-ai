@@ -1,4 +1,4 @@
-import { NativeModules, NativeEventEmitter,requireNativeComponent,UIManager,type ViewStyle } from 'react-native';
+import { NativeModules, NativeEventEmitter,requireNativeComponent,UIManager } from 'react-native';
 import type { FaceRecognitionInterface, InitConfig, FaceDetectionResult } from './types';
 
  const LINKING_ERROR =
@@ -7,7 +7,6 @@ import type { FaceRecognitionInterface, InitConfig, FaceDetectionResult } from '
    '- You are not using Expo Go\n';
 
 type FaceAISDKProps = {
-  style:ViewStyle,
   cameraLens: number;
   livenessLevel: number;
 };

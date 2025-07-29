@@ -1,6 +1,7 @@
 package com.faceAI.demo
 
 import android.widget.FrameLayout
+import android.graphics.Color
 import androidx.fragment.app.FragmentActivity
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
@@ -12,11 +13,11 @@ import android.util.Log
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactApplicationContext
 import android.widget.RelativeLayout
-
+import com.faceAI.demo.R;
 class FaceCameraViewManager(private val reactContext: ReactApplicationContext): SimpleViewManager<View>(), LifecycleEventListener{
     private var cameraLens: Int = 0
     private var checkLivenessLevel: Int = 0
-    private var linearLayout: FrameLayout? = null
+
 
     init {
         reactContext.addLifecycleEventListener(this)
@@ -28,21 +29,26 @@ class FaceCameraViewManager(private val reactContext: ReactApplicationContext): 
         const val REACT_CLASS = "FaceAICameraView"
     }
 
-    override fun getName() = "FaceAICameraView"
+    override fun getName():String = "FaceAICameraView"
 
 
   override fun createViewInstance(reactContext: ThemedReactContext): View {
     Log.d("TestFaceCameraViewManager", "createViewInstance")
-    linearLayout = FrameLayout(reactContext).apply {
-      layoutParams = FrameLayout.LayoutParams(
-        RelativeLayout.LayoutParams.MATCH_PARENT,
-        RelativeLayout.LayoutParams.MATCH_PARENT
-      )
-      
 
+val linearLayout = FrameLayout(reactContext).apply {
+        layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        setBackgroundColor(Color.parseColor("#000000"))
+        id = View.generateViewId()
+    }
+    addView(linearLayout)
+   linearLayout.post {
+         addCameraFragment(linearLayout,reactContext)
     }
 
-    return linearLayout!!
+    return linearLayout
   }
 
   @ReactProp(name = "livenessLevel")
@@ -64,24 +70,23 @@ class FaceCameraViewManager(private val reactContext: ReactApplicationContext): 
 
     private fun addCameraFragment(container: FrameLayout, reactContext: ThemedReactContext) {
         val activity = reactContext.currentActivity as? FragmentActivity ?: return
-        //val fragment = CameraXFragment.newInstance(CameraXBuilder())
-        val cameraLensFacing = 0
-        val degree = 90
+        val cameraLensFacing = cameraLens
+        val degree = 0
+
+
         val cameraXBuilder = CameraXBuilder.Builder()
                 .setCameraLensFacing(cameraLensFacing) //前后摄像头
-                .setLinearZoom(0.0001f)    //焦距范围[0f,1.0f]，参考{@link CameraControl#setLinearZoom(float)}
+                .setLinearZoom(0f)    //焦距范围[0f,1.0f]，参考{@link CameraControl#setLinearZoom(float)}
                 .setRotation(degree)      //画面旋转方向
                 .setSize(CameraXFragment.SIZE.DEFAULT) //相机的分辨率大小。一般默认就可以
                 .create();
 
         val cameraXFragment = CameraXFragment.newInstance(cameraXBuilder);
+            activity?.supportFragmentManager?.beginTransaction()?.apply {
+                replace(container.id, cameraXFragment)
+                commit()
+            }
 
-
-
-        activity.supportFragmentManager
-            .beginTransaction()
-            .replace(container.id, cameraXFragment)
-            .commitAllowingStateLoss()
     }
 
     override fun onHostResume() {
