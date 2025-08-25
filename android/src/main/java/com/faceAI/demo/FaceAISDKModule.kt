@@ -1,97 +1,155 @@
 package com.faceAI.demo
-import android.content.ContentResolver
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.util.Log
-import com.facebook.react.bridge.*
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import java.io.ByteArrayOutputStream
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.WritableArray
-import android.util.Base64
-import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.faceAI.demo.FaceAIConfig
-import com.faceAI.demo.SysCamera.addFace.AddFaceImageActivity
-import androidx.core.content.ContextCompat
+
+import android.app.Activity
 import android.content.Intent
-import com.faceAI.demo.SysCamera.addFace.AddFaceImageActivity.ADD_FACE_IMAGE_TYPE_KEY
-import org.json.JSONObject
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.facebook.react.bridge.*
+import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.faceAI.demo.SysCamera.addFace.AddFaceImageActivity
 
 class FaceAISDKModule(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext) {
+    ReactContextBaseJavaModule(reactContext) {
 
-  companion object {
-    public var faceCameraViewManager: FaceCameraViewManager? = null
-  }
-
-
-  override fun getName(): String = "FaceAISDK"
-
-  // 示例方法：初始化 SDK（替换为真实 SDK 调用）
-  @ReactMethod
-  fun initializeSDK(config: ReadableMap, promise: Promise) {
-    try {
-      // TODO: 替换为真实 SDK 初始化逻辑
-      val apiKey = config.getString("apiKey")
-      println("Initializing with key: $apiKey")
-      Log.d("FaceRecognition", "Initializing with key: $apiKey")
-      val reactContext: ReactApplicationContext = getReactApplicationContext()
-      val context: Context = reactContext.getApplicationContext()
-      FaceAIConfig.init(context)
-
-
-      promise.resolve("SDK Initialized")
-    } catch (e: Exception) {
-      promise.reject("INIT_ERROR", e.message)
+    companion object {
+        private const val TAG = "FaceAISDKModule"
+        var faceCameraViewManager: FaceCameraViewManager? = null
     }
-  }
 
-  // 示例方法：检测人脸（返回 base64 图片）
-  @ReactMethod
-  fun detectFace(imagePath: String, promise: Promise) {
-    try {
-      // TODO: 替换为真实人脸检测逻辑
-      val result = Arguments.createMap().apply {
-        putString("faceId", "fake-face-id-123")
-        putDouble("confidence", 0.95)
-        putString("image", "fake-base64-image")
-      }
-      promise.resolve(result)
-    } catch (e: Exception) {
-      promise.reject("DETECT_ERROR", e.message)
+    private val reactContext: ReactApplicationContext = reactContext
+    // 用于临时存储 Promise（等待 Activity 返回结果）
+    private var activityResultPromise: Promise? = null
+
+    override fun getName(): String = "FaceAISDK"
+
+    // 初始化 SDK
+    @ReactMethod
+    fun initializeSDK(config: ReadableMap, promise: Promise) {
+        try {
+            val apiKey = config.getString("apiKey")
+            Log.d("FaceRecognition", "Initializing with key: $apiKey")
+            FaceAIConfig.init(reactContext.applicationContext)
+            promise.resolve("SDK Initialized")
+        } catch (e: Exception) {
+            promise.reject("INIT_ERROR", e.message)
+        }
     }
-  }
 
-  // 示例方法：检测人脸（返回 base64 图片）
-  @ReactMethod
-  fun addFace(imagePath: String, promise: Promise) {
-    try {
-      val intent = Intent(reactApplicationContext, AddFaceImageActivity::class.java).apply {
-        putExtra("ADD_FACE_IMAGE_TYPE_KEY", AddFaceImageActivity.AddFaceImageTypeEnum.FACE_VERIFY.name)
-      }
-      val act = currentActivity ?: return
-      act.startActivity(intent)
-      val result = Arguments.createMap().apply {
-        putString("faceId", "fake-face-id-123")
-        putDouble("confidence", 0.95)
-        putString("image", "fake-base64-image")
-      }
-
-      promise.resolve(result)
-    } catch (e: Exception) {
-      promise.reject("DETECT_ERROR", e.message)
+    // 检测人脸
+    @ReactMethod
+    fun detectFace(imagePath: String, promise: Promise) {
+        try {
+            val result = Arguments.createMap().apply {
+                putString("faceId", "fake-face-id-123")
+                putDouble("confidence", 0.95)
+                putString("image", "fake-base64-image")
+            }
+            promise.resolve(result)
+        } catch (e: Exception) {
+            promise.reject("DETECT_ERROR", e.message)
+        }
     }
-  }
 
+    // 添加人脸
+    @ReactMethod
+    fun addFace(imagePath: String, promise: Promise) {
+        try {
+            val intent = Intent(reactContext, AddFaceImageActivity::class.java).apply {
+                putExtra(AddFaceImageActivity.ADD_FACE_IMAGE_TYPE_KEY, 
+                         AddFaceImageActivity.AddFaceImageTypeEnum.FACE_VERIFY.name)
+            }
+            currentActivity?.startActivity(intent)
+            
+            val result = Arguments.createMap().apply {
+                putString("faceId", "fake-face-id-123")
+                putDouble("confidence", 0.95)
+                putString("image", "fake-base64-image")
+            }
+            promise.resolve(result)
+        } catch (e: Exception) {
+            promise.reject("DETECT_ERROR", e.message)
+        }
+    }
 
-  // 发送事件到 JS（可选）
-  private fun sendEvent(eventName: String, params: WritableMap?) {
-    reactApplicationContext
-      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-      .emit(eventName, params)
-  }
+    // 启动活体检测
+    @ReactMethod
+    fun startLiveNess(imagePath: String, promise: Promise) {
+        try {
+            val currentActivity = currentActivity
+            if (currentActivity == null) {
+                promise.reject("ACTIVITY_NULL", "当前没有活跃的 Activity")
+                return
+            }
+
+            // 保存 Promise 用于后续回调
+            activityResultPromise = promise
+
+            // 创建启动 Activity 的 Intent
+            val intent = Intent(reactContext, AddFaceImageActivity::class.java).apply {
+                putExtra(AddFaceImageActivity.ADD_FACE_IMAGE_TYPE_KEY,
+                         AddFaceImageActivity.AddFaceImageTypeEnum.FACE_VERIFY.name)
+            }
+
+            // 通过当前 Activity 注册结果回调
+            val launcher = currentActivity.registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+                handleActivityResult(result)
+            }
+
+            // 启动 Activity
+            launcher.launch(intent)
+
+        } catch (e: Exception) {
+            activityResultPromise?.reject("LAUNCH_ERROR", e.message)
+            activityResultPromise = null
+            Log.e(TAG, "启动 Activity 失败", e)
+        }
+    }
+
+    // 处理 Activity 返回结果
+    private fun handleActivityResult(result: ActivityResult) {
+        val promise = activityResultPromise ?: return
+
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
+                val data = result.data
+                if (data != null) {
+                    val resultStr = data.getStringExtra("result")
+                    val map = Arguments.createMap().apply {
+                        putString("result", resultStr)
+                    }
+                    promise.resolve(map)
+                    sendEvent("LiveNessResult", map)
+                    currentActivity?.let {
+                        Toast.makeText(it, "操作成功: $resultStr", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    promise.reject("DATA_NULL", "返回数据为空")
+                }
+            }
+            Activity.RESULT_CANCELED -> {
+                promise.reject("USER_CANCEL", "用户取消操作")
+                currentActivity?.let {
+                    Toast.makeText(it, "操作已取消", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else -> {
+                promise.reject("UNKNOWN_ERROR", "未知错误，结果码: ${result.resultCode}")
+            }
+        }
+
+        // 清空 Promise，避免内存泄漏
+        activityResultPromise = null
+    }
+
+    // 发送事件到 JS 层
+    private fun sendEvent(eventName: String, params: WritableMap?) {
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            .emit(eventName, params)
+    }
 }
+    

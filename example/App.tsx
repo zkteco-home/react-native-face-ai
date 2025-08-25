@@ -15,7 +15,7 @@ import {
   Platform,
   Image,
 } from 'react-native';
-import { FaceRecognitionAPI,FaceAISDKView } from 'react-native-face-recognition';
+import { FaceRecognitionAPI,FaceAISDKView,subscribeToEvents  } from 'react-native-face-recognition';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { version as ReactNativeVersion } from 'react-native/Libraries/Core/ReactNativeVersion';
 const COLORS = {
@@ -130,6 +130,20 @@ function App() {
     requestCameraPermission();
     init();
   }, []);
+
+  useEffect(() => {
+    // 1. 启动 mock 事件
+   // FaceRecognitionAPI.startMockEvents();
+
+    // 2. 订阅
+    const sub = subscribeToEvents((evt) => {
+      console.log('收到原生事件:', evt);
+    });
+
+    // 3. 清理
+    return () => sub.remove();
+  }, []);
+
 
   function getVersionLabel() {
     const version =

@@ -45,7 +45,7 @@ val linearLayout = FrameLayout(reactContext).apply {
     }
     addView(linearLayout)
    linearLayout.post {
-         addCameraFragment(linearLayout,reactContext)
+        // addCameraFragment(linearLayout,reactContext)
     }
 
     return linearLayout

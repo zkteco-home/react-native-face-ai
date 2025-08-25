@@ -141,6 +141,18 @@ public class AddFaceImageActivity extends BaseActivity {
 
             case HEAD_CENTER:
                 tipsTextView.setText(R.string.keep_face_tips); //2秒后确认图像
+                //kt
+                //val resultIntent = Intent().apply {
+                //putExtra("result", "处理完成！收到的参数")
+               // }
+
+               Intent resultIntent = new Intent();
+                resultIntent.putExtra("result", "处理完成！收到的参数: " );
+                
+                // 设置返回结果并关闭当前 Activity
+                setResult(RESULT_OK, resultIntent)
+                finish()
+
                 break;
 
             case TILT_HEAD:
