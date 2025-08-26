@@ -26,7 +26,7 @@ export const FaceRecognitionAPI: FaceRecognitionInterface = {
   initializeSDK: (config: InitConfig) => FaceAISDK.initializeSDK(config),
   detectFace: (imagePath: string) => FaceAISDK.detectFace(imagePath),
   addFace: (imagePath: string) => FaceAISDK.addFace(imagePath),
-  startLiveNess: (imagePath: string) => FaceAISDK.addFace(imagePath),
+  startLiveNess: (imagePath: string) => FaceAISDK.startLiveNess(imagePath),
 
 };
 

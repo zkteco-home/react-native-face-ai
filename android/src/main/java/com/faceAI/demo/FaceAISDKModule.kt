@@ -14,15 +14,18 @@ import androidx.activity.result.ActivityResult
 import com.facebook.react.bridge.BaseActivityEventListener
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import com.facebook.react.bridge.ActivityEventListener
 
 
 class FaceAISDKModule(reactContext: ReactApplicationContext) :
-    ReactContextBaseJavaModule(reactContext) {
+    ReactContextBaseJavaModule(reactContext), ActivityEventListener { // ← 添加接口
+
+
     private var TAG1 = "FACEAISDK"
 
-    private var liveNessLauncher: ActivityResultLauncher<Intent>? = null
-
-
+ init {
+        reactContext.addActivityEventListener(this)
+    }
     companion object {
         private const val TAG = "FaceAISDKModule"
         var faceCameraViewManager: FaceCameraViewManager? = null
@@ -88,42 +91,46 @@ class FaceAISDKModule(reactContext: ReactApplicationContext) :
     // 启动活体检测
     @ReactMethod
     fun startLiveNess(imagePath: String, promise: Promise) {
-       try {
-            // 获取当前活跃的 Activity
-            val activity = currentActivity ?: run {
-                promise.reject("ACTIVITY_NULL", "当前没有活跃的 Activity")
-                return@startLiveNess
-            }
+        Log.d(TAG1, "currentActivity: ")
 
-            // 确保 Activity 是 ComponentActivity 类型
-            if (activity !is ComponentActivity) {
-                promise.reject("ACTIVITY_TYPE_ERROR", "当前 Activity 不是 ComponentActivity 类型，不支持结果回调")
-                return@startLiveNess
-            }
-            val componentActivity = activity
-
-            // 保存 Promise
-            activityResultPromise = promise
-        Log.d(TAG1, "registerForActivityResult")
-            // 注册 Activity 结果回调
-            val launcher: ActivityResultLauncher<Intent> = componentActivity.registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()
-            ) { result: ActivityResult ->
-                handleActivityResult(result)
-            }
-
-            // 启动目标 Activity
-            val intent = Intent(reactContext, AddFaceImageActivity::class.java).apply {
-                putExtra(AddFaceImageActivity.ADD_FACE_IMAGE_TYPE_KEY,
-                    AddFaceImageActivity.AddFaceImageTypeEnum.FACE_VERIFY.name)
-            }
-            launcher.launch(intent)
-
-        } catch (e: Exception) {
-            activityResultPromise?.reject("LAUNCH_ERROR", e.message ?: "启动失败")
-            activityResultPromise = null
+        val activity = currentActivity ?: run {
+            promise.reject("ACTIVITY_NULL", "当前没有活跃的 Activity")
+            return
         }
+        activityResultPromise = promise
+        val intent = Intent(reactContext, AddFaceImageActivity::class.java)
+        activity.startActivityForResult(intent, 1001)
+
     }
+
+
+override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?) {
+    if (requestCode == 1001) {
+        if (resultCode == Activity.RESULT_OK) {
+           // activityResultPromise?.resolve("success")
+
+        Log.d(TAG1, "onActivityResult=========")
+
+            val map = Arguments.createMap().apply {
+                        putString("result", "success")
+                }
+                  //  promise.resolve(map)
+                    
+                    Log.d(TAG1, "sendEvent:$data")
+
+                    sendEvent("LiveNessResult", map)
+
+
+        } else {
+           // activityResultPromise?.reject("FAILED", "活体检测失败")
+        }
+        activityResultPromise = null
+    }
+}
+
+override fun onNewIntent(intent: Intent) {
+    // 可留空
+}
 
 
     // 处理 Activity 返回结果
