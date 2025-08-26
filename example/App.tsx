@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import { FaceRecognitionAPI,FaceAISDKView,subscribeToEvents  } from 'react-native-face-recognition';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { version as ReactNativeVersion } from 'react-native/Libraries/Core/ReactNativeVersion';
+
 const COLORS = {
   light: {
     background: '#f3f3f3',
@@ -102,6 +102,22 @@ function App() {
     }
   };
 
+
+  const startLiveNess = async () => {
+    const pickerRes = { assets: [{ uri: 'ssffs' }] }; 
+    if (pickerRes.assets?.[0]?.uri) {
+      try {
+        const res = await FaceRecognitionAPI.startLiveNess(
+          pickerRes.assets[0].uri,
+        );
+        setResult(res);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const requestCameraPermission = async () => {
@@ -145,19 +161,6 @@ function App() {
   }, []);
 
 
-  function getVersionLabel() {
-    const version =
-      [
-        ReactNativeVersion.major,
-        ReactNativeVersion.minor,
-        ReactNativeVersion.patch,
-      ].join('.') +
-      (ReactNativeVersion.prerelease != null
-        ? '-' + ReactNativeVersion.prerelease
-        : '');
-
-    return <Text style={styles.label}>Version: {version}</Text>;
-  }
 
   function getHermesLabel(){
 
@@ -178,7 +181,7 @@ function App() {
           }
         />
         <Text style={styles.title}>Welcome to React Native</Text>
-        {getVersionLabel()}
+        
         {getHermesLabel()}
       </View>
       <Text>FaceRecognition Example</Text>
@@ -192,7 +195,10 @@ function App() {
         </>
       )}
 
-    <FaceRecognitionView />
+      <View style={{height:20}}></View>
+      <Button title="3. StartLive" onPress={startLiveNess} />
+
+   
     </View>
   );
 }

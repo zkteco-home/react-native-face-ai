@@ -32,7 +32,7 @@ export const FaceRecognitionAPI: FaceRecognitionInterface = {
 
 // 可选：监听原生事件
 export const subscribeToEvents = (callback: (event: any) => void) => {
-  return faceRecognitionEmitter.addListener('FaceRecognitionEvent', callback);
+  return faceRecognitionEmitter.addListener('LiveNessResult', callback);
 };
 
 export type { InitConfig, FaceDetectionResult };

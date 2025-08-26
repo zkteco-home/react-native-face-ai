@@ -43,7 +43,7 @@ val linearLayout = FrameLayout(reactContext).apply {
         setBackgroundColor(Color.parseColor("#000000"))
         id = View.generateViewId()
     }
-    addView(linearLayout)
+    //addView(linearLayout)
    linearLayout.post {
         // addCameraFragment(linearLayout,reactContext)
     }

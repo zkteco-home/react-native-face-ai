@@ -88,7 +88,7 @@ public class AddFaceImageActivity extends BaseActivity {
         baseImageDispose = new BaseImageDispose(this, 2, new BaseImageCallBack() {
             @Override
             public void onCompleted(Bitmap bitmap, float silentLiveValue) {
-                runOnUiThread(() -> showConfirmDialog(bitmap, silentLiveValue));
+                runOnUiThread(() -> onFaceCompleted(bitmap, silentLiveValue));
             }
 
             @Override
@@ -141,17 +141,6 @@ public class AddFaceImageActivity extends BaseActivity {
 
             case HEAD_CENTER:
                 tipsTextView.setText(R.string.keep_face_tips); //2秒后确认图像
-                //kt
-                //val resultIntent = Intent().apply {
-                //putExtra("result", "处理完成！收到的参数")
-               // }
-
-               Intent resultIntent = new Intent();
-                resultIntent.putExtra("result", "处理完成！收到的参数: " );
-                
-                // 设置返回结果并关闭当前 Activity
-                setResult(RESULT_OK, resultIntent)
-                finish()
 
                 break;
 
@@ -215,6 +204,19 @@ public class AddFaceImageActivity extends BaseActivity {
         finish();
     }
 
+    private void onFaceCompleted(Bitmap bitmap, float silentLiveValue) {
+                
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("result", "处理完成！收到的参数: " );
+                Log.d("FACEAISDK", "HEAD_CENTER");
+                // 设置返回结果并关闭当前 Activity
+                setResult(RESULT_OK, resultIntent);
+
+                finish();
+ 
+    
+    
+    }
 
     /**
      * 确认是否保存人脸底图

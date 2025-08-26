@@ -101,7 +101,7 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.6.2'
 // 核心依赖（版本必须 ≥ 1.2.0，推荐使用最新稳定版）
     implementation 'androidx.activity:activity:1.8.0'
-    implementation 'androidx.activity:activity-ktx:2.1.20' // Kotlin 扩展
+    implementation 'androidx.activity:activity-ktx:1.8.0' // Kotlin 扩展
     
     // 确保使用 AndroidX 核心库
     implementation 'androidx.core:core-ktx:1.12.0'

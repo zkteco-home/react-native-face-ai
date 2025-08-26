@@ -10,14 +10,25 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.faceAI.demo.SysCamera.addFace.AddFaceImageActivity
+import androidx.activity.result.ActivityResult
+import com.facebook.react.bridge.BaseActivityEventListener
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+
 
 class FaceAISDKModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
+    private var TAG1 = "FACEAISDK"
+
+    private var liveNessLauncher: ActivityResultLauncher<Intent>? = null
+
 
     companion object {
         private const val TAG = "FaceAISDKModule"
         var faceCameraViewManager: FaceCameraViewManager? = null
     }
+
+
 
     private val reactContext: ReactApplicationContext = reactContext
     // 用于临时存储 Promise（等待 Activity 返回结果）
@@ -77,42 +88,48 @@ class FaceAISDKModule(reactContext: ReactApplicationContext) :
     // 启动活体检测
     @ReactMethod
     fun startLiveNess(imagePath: String, promise: Promise) {
-        try {
-            val currentActivity = currentActivity
-            if (currentActivity == null) {
+       try {
+            // 获取当前活跃的 Activity
+            val activity = currentActivity ?: run {
                 promise.reject("ACTIVITY_NULL", "当前没有活跃的 Activity")
-                return
+                return@startLiveNess
             }
 
-            // 保存 Promise 用于后续回调
+            // 确保 Activity 是 ComponentActivity 类型
+            if (activity !is ComponentActivity) {
+                promise.reject("ACTIVITY_TYPE_ERROR", "当前 Activity 不是 ComponentActivity 类型，不支持结果回调")
+                return@startLiveNess
+            }
+            val componentActivity = activity
+
+            // 保存 Promise
             activityResultPromise = promise
-
-            // 创建启动 Activity 的 Intent
-            val intent = Intent(reactContext, AddFaceImageActivity::class.java).apply {
-                putExtra(AddFaceImageActivity.ADD_FACE_IMAGE_TYPE_KEY,
-                         AddFaceImageActivity.AddFaceImageTypeEnum.FACE_VERIFY.name)
-            }
-
-            // 通过当前 Activity 注册结果回调
-            val launcher = currentActivity.registerForActivityResult(
+        Log.d(TAG1, "registerForActivityResult")
+            // 注册 Activity 结果回调
+            val launcher: ActivityResultLauncher<Intent> = componentActivity.registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
-            ) { result ->
+            ) { result: ActivityResult ->
                 handleActivityResult(result)
             }
 
-            // 启动 Activity
+            // 启动目标 Activity
+            val intent = Intent(reactContext, AddFaceImageActivity::class.java).apply {
+                putExtra(AddFaceImageActivity.ADD_FACE_IMAGE_TYPE_KEY,
+                    AddFaceImageActivity.AddFaceImageTypeEnum.FACE_VERIFY.name)
+            }
             launcher.launch(intent)
 
         } catch (e: Exception) {
-            activityResultPromise?.reject("LAUNCH_ERROR", e.message)
+            activityResultPromise?.reject("LAUNCH_ERROR", e.message ?: "启动失败")
             activityResultPromise = null
-            Log.e(TAG, "启动 Activity 失败", e)
         }
     }
 
+
     // 处理 Activity 返回结果
     private fun handleActivityResult(result: ActivityResult) {
-        val promise = activityResultPromise ?: return
+       // val promise = activityResultPromise ?: return
+        Log.d(TAG1, "handleActivityResult")
 
         when (result.resultCode) {
             Activity.RESULT_OK -> {
@@ -122,23 +139,23 @@ class FaceAISDKModule(reactContext: ReactApplicationContext) :
                     val map = Arguments.createMap().apply {
                         putString("result", resultStr)
                     }
-                    promise.resolve(map)
+                  //  promise.resolve(map)
+                    
+                    Log.d(TAG1, "sendEvent:$map")
+
                     sendEvent("LiveNessResult", map)
-                    currentActivity?.let {
-                        Toast.makeText(it, "操作成功: $resultStr", Toast.LENGTH_SHORT).show()
-                    }
                 } else {
-                    promise.reject("DATA_NULL", "返回数据为空")
+                  //  promise.reject("DATA_NULL", "返回数据为空")
                 }
             }
             Activity.RESULT_CANCELED -> {
-                promise.reject("USER_CANCEL", "用户取消操作")
+              //  promise.reject("USER_CANCEL", "用户取消操作")
                 currentActivity?.let {
                     Toast.makeText(it, "操作已取消", Toast.LENGTH_SHORT).show()
                 }
             }
             else -> {
-                promise.reject("UNKNOWN_ERROR", "未知错误，结果码: ${result.resultCode}")
+             //   promise.reject("UNKNOWN_ERROR", "未知错误，结果码: ${result.resultCode}")
             }
         }
 
