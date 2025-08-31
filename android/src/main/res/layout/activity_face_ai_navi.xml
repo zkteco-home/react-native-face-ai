@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
-
-<androidx.constraintlayout.widget.ConstraintLayout 
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/face_lib_main_color"
     android:paddingTop="5dp"
-    >
+    tools:context="com.faceAI.demo.FaceAINaviActivity">
 
     <ImageView
         android:id="@+id/system_info"
@@ -58,8 +57,8 @@
         android:layout_width="0dp"
         android:layout_height="75dp"
         app:cardCornerRadius="6dp"
-        android:layout_marginLeft="29dp"
-        android:layout_marginRight="11dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="11dp"
         android:layout_marginTop="10dp"
         app:cardBackgroundColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/face_search"
@@ -103,8 +102,8 @@
         android:layout_width="0dp"
         android:layout_height="75dp"
         app:cardCornerRadius="6dp"
-        android:layout_marginRight="29dp"
-        android:layout_marginLeft="11dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginStart="11dp"
         android:layout_marginTop="10dp"
         app:cardBackgroundColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -148,8 +147,8 @@
         android:layout_marginTop="22dp"
         android:background="@drawable/bg_btn"
         android:gravity="center"
-        android:layout_marginLeft="29dp"
-        android:layout_marginRight="29dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="22dp"
         android:visibility="visible"
         android:text="@string/parameter_setting"
         android:textColor="@color/face_lib_main_color"
@@ -167,8 +166,8 @@
         android:layout_marginTop="44dp"
         android:background="@drawable/bg_btn"
         android:gravity="center"
-        android:layout_marginLeft="29dp"
-        android:layout_marginRight="29dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="22dp"
         android:visibility="visible"
         android:text="@string/binocular_camera_demo"
         android:textColor="@color/face_lib_main_color"
@@ -202,12 +201,12 @@
     <TextView
         android:id="@+id/liveness_detection"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="42dp"
         android:layout_marginBottom="18dp"
         android:background="@drawable/bg_btn"
         android:gravity="center"
-        android:layout_marginLeft="29dp"
-        android:layout_marginRight="29dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:text="@string/liveness_detection"
         android:textColor="@color/face_lib_main_color"
         android:textStyle="bold"
@@ -219,12 +218,12 @@
     <TextView
         android:id="@+id/two_face_verify"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="42dp"
         android:layout_marginBottom="18dp"
         android:background="@drawable/bg_btn"
         android:gravity="center"
-        android:layout_marginLeft="29dp"
-        android:layout_marginRight="29dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:visibility="visible"
         android:text="@string/two_face_image_verify"
         android:textColor="@color/face_lib_main_color"
@@ -238,34 +237,37 @@
     <TextView
         android:id="@+id/custom_camera"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginBottom="11dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/bg_btn"
         android:gravity="center"
-        android:layout_marginLeft="29dp"
-        android:layout_marginRight="29dp"
-        android:visibility="visible"
         android:text="@string/custom_camera"
         android:textColor="@color/face_lib_main_color"
-        android:textStyle="bold"
         android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/more_about_me"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/more_about_me" />
-
+        app:layout_constraintHorizontal_bias="0.438"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/more_about_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="15dp"
+        android:padding="12dp"
         android:visibility="visible"
         android:text="@string/about_us"
         android:textColor="@android:color/white"
         android:textSize="15sp"
-        android:layout_marginBottom="11dp"
+        android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout >
-
+<layout>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +14,6 @@
         android:layout_margin="19dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 
     <!-- 可以替换成你自己的UI样式,需要 FaceCoverView 源码联系对接工程师-->
     <com.faceAI.demo.base.view.DemoFaceCoverView
@@ -46,12 +43,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textColor="@color/face_lib_main_color"
-        android:textSize="17sp"
+        android:textSize="18sp"
         android:gravity="center"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:paddingLeft="11dp"
         android:paddingRight="11dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_result" />
@@ -62,8 +60,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:textColor="@color/red"
-        android:textSize="16sp"
+        android:textColor="@color/orange"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:gravity="center"
         android:paddingTop="2dp"

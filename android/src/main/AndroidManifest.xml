@@ -13,21 +13,6 @@
     <application>
 
         <activity
-            android:name="com.faceAI.demo.UVCCamera.search.FaceSearch_UVCCameraActivity"
-            android:theme="@style/FaceAITheme"
-            android:exported="true"/>
-
-        <activity
-            android:name="com.faceAI.demo.UVCCamera.verify.FaceVerify_UVCCameraActivity"
-            android:theme="@style/FaceAITheme"
-            android:exported="true"/>
-
-        <activity
-            android:name="com.faceAI.demo.UVCCamera.addFace.AddFace_UVCCameraActivity"
-            android:theme="@style/FaceAITheme"
-            android:exported="true"/>
-
-        <activity
             android:name="com.faceAI.demo.FaceAINaviActivity"
             android:configChanges="orientation"
             android:theme="@style/AppTheme"
@@ -47,10 +32,12 @@
             android:theme="@style/FaceAITheme"
             android:exported="false"/>
 
+
         <activity
-            android:name="com.faceAI.demo.SysCamera.verify.FaceVerificationActivity"
+            android:name="com.faceAI.demo.SysCamera.verify.FaceVerification32CPUTestActivity"
             android:theme="@style/FaceAITheme"
             android:exported="false"/>
+
 
         <activity
             android:name="com.faceAI.demo.AboutFaceAppActivity"
@@ -58,9 +45,20 @@
             android:exported="false" />
 
         <activity
-            android:name=".SysCamera.diyCamera.CustomCameraActivity"
+            android:name=".SysCamera.camera.CustomCameraActivity"
             android:theme="@style/AppTheme"
             android:exported="false" />
+
+        <activity
+            android:name="com.faceAI.demo.SysCamera.search.FaceSearchImageMangerActivity"
+            android:theme="@style/AppTheme"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name="com.faceAI.demo.SysCamera.verify.FaceVerificationActivity"
+            android:theme="@style/FaceAITheme"
+            android:exported="false"/>
 
         <activity
             android:name="com.faceAI.demo.SysCamera.addFace.AddFaceImageActivity"
@@ -79,10 +77,10 @@
             android:launchMode="singleTop" />
 
         <activity
-            android:name="com.faceAI.demo.SysCamera.search.FaceSearchImageMangerActivity"
+            android:name="com.faceAI.demo.SysCamera.search.FaceSearchMNActivity"
+            android:exported="false"
             android:theme="@style/AppTheme"
-            android:exported="false">
-        </activity>
+            android:launchMode="singleTop" />
 
         <activity
             android:name="com.faceAI.demo.SysCamera.verify.FaceVerifyWelcomeActivity"

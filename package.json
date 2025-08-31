@@ -1,10 +1,10 @@
 {
-  "name": "react-native-face-recognition",
+  "name": "react-native-face-ai",
   "version": "1.0.0",
   "license": "MIT",
-  "description": "A toolbox for your React Native app localization.",
-  "author": "Mathieu Acthernoene <zoontek@gmail.com>",
-  "homepage": "https://github.com/zoontek/react-native-localize",
+  "description": "React Native module for compairing faces using phone camera.",
+  "author": "Michael wang <my9988@126.com>",
+  "homepage": "https://github.com/zkteco-home/react-native-face-ai",
   "types": "lib/index.d.ts",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -23,15 +23,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/zoontek/react-native-localize.git"
+    "url": "https://github.com/zkteco-home/react-native-facek-ai.git"
   },
   "keywords": [
-    "react-native-face-recognition",
+    "react-native-face-ai",
     "react-native",
     "react-native-macos",
-    "face",
-    "localization",
-    "l20n"
+    "face"
   ],
   "scripts": {
     "format": "prettier '**/*' -u -w",
@@ -41,12 +39,7 @@
     "build": "npm run clean && npx tsc"
   },
 
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-organize-imports"
-    ]
-  },
-  "peerDependencies": {
+   "peerDependencies": {
     "react": "*",
     "react-native": "*"
   },
@@ -56,17 +49,8 @@
     "@types/jest": "^29.5.13",
     "@types/react": "^19.1.0",
     "prettier": "^3.6.2",
-    "prettier-plugin-organize-imports": "^4.1.0",
     "react": "19.1.0",
-    "react-native": "0.80.1",
-    "typescript": "^5.8.3"
-  },
-  "codegenConfig": {
-    "name": "RNFaceAISDK",
-    "type": "modules",
-    "jsSrcsDir": "./src",
-    "android": {
-      "javaPackageName": "com.faceai"
-    }
+    "react-native": "0.81.0",
+    "typescript": "^5.9.2"
   }
 }
