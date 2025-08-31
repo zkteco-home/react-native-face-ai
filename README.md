@@ -40,10 +40,10 @@ $ yarn add react-native-face-ai
 #### 2.1 FaceAI
   - Activate the `FacAI` by calling the `setActivation` method:
   ```kotlin
-        var ret = await FaceRecognitionAPI.setActivation("...");
+        var ret = await FaceAI.setActivation("...");
         console.log("set activation:", ret);
   ```
-  - Initialize the `FaceRecognitionAPI` by calling the `initSDK` method:
+  - Initialize the `FaceAI` by calling the `initSDK` method:
   ```kotlin
       var ret = await FaceAI.initSDK();
   ```
