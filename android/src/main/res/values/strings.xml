@@ -34,12 +34,19 @@
     <string name="not_real_face">Not real human face</string>
     <string name="not_real_face_for_debug">Not real human face </string>
     <string name="add_a_face_image">Add a face image </string>
+    <string name="add_face_from_camera">Add face from camera</string>
+    <string name="add_face_from_photo">Add face from camera</string>
+    <string name="input_face_id_tips">Please input face name</string>
+    <string name="face_verify_pause">Verify paused</string>
+    <string name="know">Know</string>
+    <string name="fragment_verify">fragment verify</string>
 
     <!--1:N 人脸搜索 face search-->
     <string name="no_matched_face">No matched face</string>
     <string name="face_dir_empty">Face dir empty</string>
 
     <!--1:1 人脸识别 face verify -->
+    <string name="face_verify_failed_title">Verify failed</string>    
     <string name="face_verify_failed">Face verify failed！Please retry</string>
     <string name="silent_anti_spoofing_error">Silent anti spoofing error</string>
     <string name="no_base_face_bitmap">No base face bitmap error</string>

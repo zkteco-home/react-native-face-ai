@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<layout>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -155,7 +155,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/rgb_uvc_camera_switch"
+                    android:id="@+id/rgb_uvc_camera_select"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -177,7 +177,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="11dp"
-                        android:text="RGB摄像头画面角度旋转"
+                        android:text="RGB摄像头选择"
                         android:textColor="@color/face_lib_main_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -185,7 +185,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/rgb_uvc_camera_horizontal"
+                    android:id="@+id/ir_uvc_camera_select"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -207,12 +207,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="11dp"
-                        android:text="RGB摄像头画面左右翻转"
+                        android:text="IR红外摄像头选择"
                         android:textColor="@color/face_lib_main_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
+
+
+
 
                 <View
                     android:layout_width="match_parent"
@@ -285,8 +288,9 @@
                     android:layout_height="1px"
                     android:background="@color/white" />
 
+
                 <LinearLayout
-                    android:id="@+id/rgb_uvc_camera_select"
+                    android:id="@+id/rgb_uvc_camera_switch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -308,7 +312,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="11dp"
-                        android:text="RGB摄像头选择"
+                        android:text="RGB摄像头画面角度旋转"
                         android:textColor="@color/face_lib_main_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -316,7 +320,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ir_uvc_camera_select"
+                    android:id="@+id/rgb_uvc_camera_horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -338,13 +342,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="11dp"
-                        android:text="IR红外摄像头选择"
+                        android:text="RGB摄像头画面左右翻转"
                         android:textColor="@color/face_lib_main_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
-
 
             </LinearLayout>
 

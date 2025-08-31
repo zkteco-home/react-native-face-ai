@@ -4,7 +4,7 @@
  *
  * @format
  */
-import { useState, useEffect,useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -15,7 +15,7 @@ import {
   Platform,
   Image,
 } from 'react-native';
-import { FaceRecognitionAPI,FaceAISDKView,subscribeToEvents  } from 'react-native-face-recognition';
+import { FaceAI } from 'react-native-face-ai';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const COLORS = {
@@ -37,48 +37,14 @@ const COLORS = {
   },
 };
 
-
-const FaceRecognitionView = () => {
-
-    const sdkViewRef = useRef(null);
-
-    useEffect(() => {
-     }, []);
-
-    const startCamera = async () => {
-      
-    };
-
-    const stopCamera = async () => {
-       
-    };
-
-    const handleViewLayout = () => {
-    };
-
-    return (
-        <View style={styles.container}>
-            <View  style={{width:200,height:300}} onLayout={handleViewLayout}>
-                <FaceAISDKView
-                    style={{flex:1}}
-                    livenessLevel={1}
-                    cameraLens={0}
-                />
-            </View>
-        </View>
-    );
-};
-
 function App() {
   const [result, setResult] = useState<any>(null);
   const [grantedCamera, setGrantedCamera] = useState(false);
-
-
-
+  const [face, setFace] = useState('');
   let colors = COLORS['light'];
   const init = async () => {
     try {
-      const msg = await FaceRecognitionAPI.initializeSDK({
+      const msg = await FaceAI.initializeSDK({
         apiKey: 'DEMO-KEY',
         enableLiveness: true,
       });
@@ -88,35 +54,15 @@ function App() {
     }
   };
 
-  const pickAndDetect = async () => {
-    const pickerRes = { assets: [{ uri: 'ssffs' }] }; 
-    if (pickerRes.assets?.[0]?.uri) {
-      try {
-        const res = await FaceRecognitionAPI.addFace(
-          pickerRes.assets[0].uri,
-        );
-        setResult(res);
-      } catch (e) {
-        console.error(e);
-      }
+  const startEnroll = async () => {
+    try {
+      const res = await FaceAI.startEnroll();
+
+      setFace(res.face_base64);
+    } catch (e) {
+      console.error(e);
     }
   };
-
-
-  const startLiveNess = async () => {
-    const pickerRes = { assets: [{ uri: 'ssffs' }] }; 
-    if (pickerRes.assets?.[0]?.uri) {
-      try {
-        const res = await FaceRecognitionAPI.startLiveNess(
-          pickerRes.assets[0].uri,
-        );
-        setResult(res);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  };
-
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -147,25 +93,7 @@ function App() {
     init();
   }, []);
 
-  useEffect(() => {
-    // 1. 启动 mock 事件
-   // FaceRecognitionAPI.startMockEvents();
-
-    // 2. 订阅
-    const sub = subscribeToEvents((evt) => {
-      console.log('收到原生事件:', evt);
-    });
-
-    // 3. 清理
-    return () => sub.remove();
-  }, []);
-
-
-
-  function getHermesLabel(){
-
-    return <Text style={styles.label}>JS Engine: Hermes</Text>;
-  }
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
@@ -181,24 +109,23 @@ function App() {
           }
         />
         <Text style={styles.title}>Welcome to React Native</Text>
-        
-        {getHermesLabel()}
       </View>
       <Text>FaceRecognition Example</Text>
-      <Button title="1. Init SDK" onPress={init} />
-          <View style={{height:20}}></View>
-      <Button title="2. AddImage" onPress={pickAndDetect} />
-      {result && (
-        <>
-          <Text>FaceID: {result.faceId}</Text>
-          <Text>Confidence: {result.confidence}</Text>
-        </>
-      )}
+      <View style={{ margin: 20 }}>
+        <Button title="1. Init SDK" onPress={init} />
+      </View>
 
-      <View style={{height:20}}></View>
-      <Button title="3. StartLive" onPress={startLiveNess} />
-
-   
+      <View style={{ margin: 20 }}>
+        <Button color="#f194ff" title="2. StartEnroll" onPress={startEnroll} />
+        {face && (
+          <Image
+            style={styles.logo}
+            source={{
+              uri: face,
+            }}
+          />
+        )}
+      </View>
     </View>
   );
 }
@@ -228,50 +155,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     marginBottom: 8,
-  },
-  callout: {
-    width: '100%',
-    maxWidth: 320,
-    marginTop: 36,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    paddingLeft: 16,
-    borderRadius: 12,
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  calloutEmphasis: {
-    fontWeight: 'bold',
-  },
-  linksContainer: {
-    flex: 1,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    columnGap: 12,
-    rowGap: 12,
-    maxWidth: 800,
-    marginBottom: 48,
-  },
-  linksTitle: {
-    width: '100%',
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  link: {
-    width: '100%',
-    paddingVertical: 20,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    borderWidth: 1,
-    boxShadow: '0 4px 8px rgba(0, 0, 0, .03)',
-  },
-  linkText: {
-    marginBottom: 4,
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
 

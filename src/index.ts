@@ -22,17 +22,46 @@ export const FaceAISDKView =
 const { FaceAISDK } = NativeModules;
 const faceRecognitionEmitter = new NativeEventEmitter(FaceAISDK);
 
-export const FaceRecognitionAPI: FaceRecognitionInterface = {
+
+const startEnrollAsync = (
+  onSuccess?: (event: any) => void,
+  onFail?: (event: any) => void
+): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const subscription = faceRecognitionEmitter.addListener('Enrolled', (event:any) => {
+      if (event.code === 1) {
+        onSuccess?.(event);
+        resolve(event);
+      } else if (event.code === 0) {
+        onFail?.(event);
+        reject(event);
+      } else {
+        reject(event);
+      }
+      subscription.remove();
+    });
+    try {
+      FaceAISDK.startEnroll();
+    } catch (err) {
+      subscription.remove();
+      reject(err);
+    }
+  });
+};
+
+
+export const FaceAI: FaceRecognitionInterface = {
   initializeSDK: (config: InitConfig) => FaceAISDK.initializeSDK(config),
   detectFace: (imagePath: string) => FaceAISDK.detectFace(imagePath),
   addFace: (imagePath: string) => FaceAISDK.addFace(imagePath),
-  startLiveNess: (imagePath: string) => FaceAISDK.startLiveNess(imagePath),
+  startEnroll: (onSuccess?: (event: any) => void,
+  onFail?: (event: any) => void) => startEnrollAsync(onSuccess,onFail),
 
 };
 
 // 可选：监听原生事件
-export const subscribeToEvents = (callback: (event: any) => void) => {
-  return faceRecognitionEmitter.addListener('LiveNessResult', callback);
-};
+//export const onEnrolled = (callback: (event: any) => void) => {
+//  return faceRecognitionEmitter.addListener('Enrolled', callback);
+///};
 
 export type { InitConfig, FaceDetectionResult };

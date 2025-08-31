@@ -90,14 +90,14 @@ class FaceAISDKModule(reactContext: ReactApplicationContext) :
 
     // 启动活体检测
     @ReactMethod
-    fun startLiveNess(imagePath: String, promise: Promise) {
+    fun startEnroll() {
         Log.d(TAG1, "currentActivity: ")
 
         val activity = currentActivity ?: run {
-            promise.reject("ACTIVITY_NULL", "当前没有活跃的 Activity")
+          //  promise.reject("ACTIVITY_NULL", "当前没有活跃的 Activity")
             return
         }
-        activityResultPromise = promise
+        //activityResultPromise = promise
         val intent = Intent(reactContext, AddFaceImageActivity::class.java)
         activity.startActivityForResult(intent, 1001)
 
@@ -108,21 +108,29 @@ override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: 
     if (requestCode == 1001) {
         if (resultCode == Activity.RESULT_OK) {
            // activityResultPromise?.resolve("success")
-
-        Log.d(TAG1, "onActivityResult=========")
+            val face_base64 = data?.getStringExtra("data")
+            Log.d(TAG1, "onActivityResult=========")
 
             val map = Arguments.createMap().apply {
+                        putInt("code", 1)
                         putString("result", "success")
+                        putString("face_base64",face_base64)
                 }
                   //  promise.resolve(map)
                     
-                    Log.d(TAG1, "sendEvent:$data")
+                   // Log.d(TAG1, "sendEvent:$face_base64")
 
-                    sendEvent("LiveNessResult", map)
+                    sendEvent("Enrolled", map)
 
 
         } else {
-           // activityResultPromise?.reject("FAILED", "活体检测失败")
+            val map = Arguments.createMap().apply {
+                        putInt("code", 0)
+                        putString("result", "fail")
+                }
+
+                sendEvent("Enrolled", map)
+
         }
         activityResultPromise = null
     }
@@ -133,7 +141,7 @@ override fun onNewIntent(intent: Intent) {
 }
 
 
-    // 处理 Activity 返回结果
+    // 处理 Activity 返回结果,depracated
     private fun handleActivityResult(result: ActivityResult) {
        // val promise = activityResultPromise ?: return
         Log.d(TAG1, "handleActivityResult")

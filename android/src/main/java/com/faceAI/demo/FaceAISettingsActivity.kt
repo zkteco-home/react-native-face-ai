@@ -4,9 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-
-import com.faceAI.demo.base.BaseActivity
 import com.faceAI.demo.databinding.ActivityFaceAiSettingsBinding
 
 
@@ -15,7 +14,7 @@ import com.faceAI.demo.databinding.ActivityFaceAiSettingsBinding
  *
  * 更多UVC 摄像头参数设置参考 https://blog.csdn.net/hanshiying007/article/details/124118486
  */
-class FaceAISettingsActivity : BaseActivity() {
+class FaceAISettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFaceAiSettingsBinding
 
     companion object {
@@ -44,7 +43,7 @@ class FaceAISettingsActivity : BaseActivity() {
             this@FaceAISettingsActivity.finish()
         }
 
-        val sharedPref = getSharedPreferences("FaceAISDK", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("FaceAISDK_SP", Context.MODE_PRIVATE)
 
         //1.切换系统相机前后
         binding.switchCamera.setOnClickListener {
@@ -86,17 +85,71 @@ class FaceAISettingsActivity : BaseActivity() {
         }
 
 
+        //==========USB摄像头（UVC协议）管理 更多参考https://github.com/shiyinghan/UVCAndroid =========
+        //UVC RGB摄像头角度旋转设置
+        binding.rgbUvcCameraSwitch.setOnClickListener {
+            var rgbDegree = sharedPref.getInt(RGB_UVC_CAMERA_DEGREE, 0)
+            rgbDegree += 90
+            rgbDegree %= 360
+            if (rgbDegree < 0) {
+                rgbDegree += 360
+            }
+            sharedPref.edit(commit = true) { putInt(RGB_UVC_CAMERA_DEGREE, rgbDegree) }
+            Toast.makeText(
+                baseContext,
+                "RGB Camera degree: $rgbDegree",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
- 
+        //RGB画面左右水平翻转
+        binding.rgbUvcCameraHorizontal.setOnClickListener {
+            val rgbHorizontalMirror = !sharedPref.getBoolean(RGB_UVC_CAMERA_MIRROR_H, false)
+            sharedPref.edit(commit = true) {
+                putBoolean(
+                    RGB_UVC_CAMERA_MIRROR_H,
+                    rgbHorizontalMirror
+                )
+            }
+            Toast.makeText(
+                baseContext,
+                "RGB CameraHorizontal: $rgbHorizontalMirror",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+
+        //UVC IR摄像头角度旋转设置
+        binding.irUvcCameraSwitch.setOnClickListener {
+            var irDegree = sharedPref.getInt(IR_UVC_CAMERA_DEGREE, 0)
+            irDegree += 90
+            irDegree %= 360
+            if (irDegree < 0) {
+                irDegree += 360
+            }
+            sharedPref.edit(commit = true) { putInt(IR_UVC_CAMERA_DEGREE, irDegree) }
+            Toast.makeText(
+                baseContext,
+                "IRCamera degree: $irDegree",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        //IR画面左右水平翻转
+        binding.irUvcCameraHorizontal.setOnClickListener {
+            val horizontalMirror = !sharedPref.getBoolean(IR_UVC_CAMERA_MIRROR_H, false)
+            sharedPref.edit(commit = true) { putBoolean(IR_UVC_CAMERA_MIRROR_H, horizontalMirror) }
+            Toast.makeText(
+                baseContext,
+                "IRCameraHorizontal: $horizontalMirror",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+
     }
 
 
-    /**
-     * 选择摄像头
-     */
-    private fun selectCamera(cameraName: String,cameraKey: String,sharedPref: SharedPreferences) {
-      
 
-    }
 
 }
