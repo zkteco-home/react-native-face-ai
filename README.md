@@ -8,7 +8,7 @@
 
 FaceAI SDK is on_device Offline Face Detection 、Recognition 、Liveness Detection Anti Spoofing and 1:N/M:N Face Search SDK
 
-# react-native-face-recognition Plugin with Liveness Detection - Fully On Premise
+# react-native-face-ai Plugin with Liveness Detection - Fully On Premise
 ## Overview
 This repository demonstrates both `face liveness detection` and `face recognition` technology for `React-Native` on `Android` and `iOS` platforms.
 
@@ -37,33 +37,33 @@ $ yarn add react-native-face-recognition
 
 
 ## API Usages
-#### 2.1 FaceRecognitionAPI
-  - Activate the `FaceRecognitionAPI` by calling the `setActivation` method:
+#### 2.1 FaceAI
+  - Activate the `FacAI` by calling the `setActivation` method:
   ```kotlin
         var ret = await FaceRecognitionAPI.setActivation("...");
         console.log("set activation:", ret);
   ```
   - Initialize the `FaceRecognitionAPI` by calling the `initSDK` method:
   ```kotlin
-      var ret = await FaceRecognitionAPI.initSDK();
+      var ret = await FaceAI.initSDK();
   ```
   - Set parameters using the  `setParam` method:
   ```kotlin
-    var ret = await FaceRecognitionAPI.setParam(checkLivenessLevel);
+    var ret = await FaceAI.setParam(checkLivenessLevel);
   ```
   - Extract faces using the `extractFaces` method:
   ```kotlin
-    var faceBoxes = await FaceRecognitionAPI.extractFaces(uri);
+    var faceBoxes = await FaceAI.extractFaces(uri);
   ```
   - Calculate the similarity between faces using the `similarityCalculation` method:
   ```kotlin
-    const similarity = await FaceRecognitionAPI.similarityCalculation(
+    const similarity = await FaceAI.similarityCalculation(
         face.templates,
         person.templates
     );
   ```
-### FaceRecognitionAPI
-  - To build the native camera screen and process face detection, please refer to the [example/App.tsx](https://github.com/zkteco-home/react-native-face-recognition/tree/master/example/App.tsx) file in the repository. 
+### FaceAI
+  - To build the native camera screen and process face detection, please refer to the [example/App.tsx](https://github.com/zkteco-home/react-native-face-ai/tree/master/example/App.tsx) file in the repository. 
 
 
 
