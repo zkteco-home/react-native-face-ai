@@ -31,9 +31,9 @@ It is supporting the **latest version**, and the **two previous minor series**.
 ## Setup
 
 ```bash
-$ npm install --save react-native-face-recognition
+$ npm install --save react-native-face-ai
 # --- or ---
-$ yarn add react-native-face-recognition
+$ yarn add react-native-face-ai
 
 
 ## API Usages
