@@ -11,7 +11,6 @@
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
 
     <application>
-
         <activity
             android:name="com.faceAI.demo.FaceAINaviActivity"
             android:configChanges="orientation"
@@ -26,26 +25,24 @@
             android:exported="false">
         </activity>
 
-
         <activity
             android:name="com.faceAI.demo.SysCamera.verify.LivenessDetectActivity"
             android:theme="@style/FaceAITheme"
             android:exported="false"/>
-
 
         <activity
             android:name="com.faceAI.demo.SysCamera.verify.FaceVerification32CPUTestActivity"
             android:theme="@style/FaceAITheme"
             android:exported="false"/>
 
-
         <activity
             android:name="com.faceAI.demo.AboutFaceAppActivity"
             android:theme="@style/AppTheme"
             android:exported="false" />
 
+        <!-- 使用完整类路径 -->
         <activity
-            android:name=".SysCamera.camera.CustomCameraActivity"
+            android:name="com.faceAI.demo.SysCamera.camera.CustomCameraActivity"
             android:theme="@style/AppTheme"
             android:exported="false" />
 
@@ -58,24 +55,21 @@
         <activity
             android:name="com.faceAI.demo.SysCamera.verify.FaceVerificationActivity"
             android:theme="@style/FaceAITheme"
-            android:exported="false"/>
+            android:exported="true"
+            tools:node="merge"/>
 
         <activity
             android:name="com.faceAI.demo.SysCamera.addFace.AddFaceImageActivity"
             android:theme="@style/FaceAITheme"
-            android:exported="false" />
+            android:exported="true" 
+            tools:node="merge"/>
 
         <activity
             android:name="com.faceAI.demo.SysCamera.search.FaceSearch1NActivity"
             android:theme="@style/FaceAITheme"
             android:exported="false" />
 
-        <activity
-            android:name="com.faceAI.demo.SysCamera.search.FaceSearchMNActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTop" />
-
+        <!-- 保留一个FaceSearchMNActivity定义 -->
         <activity
             android:name="com.faceAI.demo.SysCamera.search.FaceSearchMNActivity"
             android:exported="false"
@@ -99,7 +93,5 @@
             android:theme="@style/AppTheme"
             android:exported="false">
         </activity>
-
     </application>
-
 </manifest>

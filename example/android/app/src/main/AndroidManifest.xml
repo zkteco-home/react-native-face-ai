@@ -25,9 +25,6 @@
         </intent-filter>
       </activity>
 
-      <activity
-        android:name="com.faceAI.demo.SysCamera.addFace.AddFaceImageActivity"
-        android:exported="true" />
 
     </application>
 </manifest>
