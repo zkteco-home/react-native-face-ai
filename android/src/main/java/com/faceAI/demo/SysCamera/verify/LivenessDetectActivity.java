@@ -22,7 +22,6 @@ import com.ai.face.faceVerify.verify.liveness.FaceLivenessType;
 import com.faceAI.demo.FaceImageConfig;
 import com.faceAI.demo.R;
 import com.faceAI.demo.SysCamera.camera.MyCameraXFragment;
-import com.faceAI.demo.SysCamera.search.ImageToast;
 import com.faceAI.demo.base.AbsBaseActivity;
 import com.faceAI.demo.base.utils.BitmapUtils;
 import com.faceAI.demo.base.utils.VoicePlayer;
@@ -111,7 +110,7 @@ public class LivenessDetectActivity extends AbsBaseActivity {
                         if(FaceImageConfig.isDebugMode(getBaseContext())){
                             runOnUiThread(() -> {
                                 scoreText.setText("RGB Live:"+silentLivenessValue);
-                                new ImageToast().show(getApplicationContext(), bitmap, "活体检测完成");
+                              
                                 new AlertDialog.Builder(LivenessDetectActivity.this)
                                         .setTitle("Debug模式提示")
                                         .setMessage("活体检测完成，其中RGB Live分数="+silentLivenessValue)

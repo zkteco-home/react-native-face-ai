@@ -32,7 +32,7 @@ import com.faceAI.demo.FaceSDKConfig;
 import com.faceAI.demo.R;
 import com.faceAI.demo.SysCamera.camera.Camera1Fragment;
 import com.faceAI.demo.SysCamera.camera.Camera1Preview;
-import com.faceAI.demo.SysCamera.search.ImageToast;
+//import com.faceAI.demo.SysCamera.search.ImageToast;
 import com.faceAI.demo.base.AbsBaseActivity;
 import com.faceAI.demo.SysCamera.camera.MyCameraXFragment;
 import com.faceAI.demo.base.utils.BitmapUtils;
@@ -252,7 +252,7 @@ public class FaceVerificationActivity extends AbsBaseActivity {
             } else if (isVerifyMatched) {
                 //2.和底片同一人
                 VoicePlayer.getInstance().addPayList(R.raw.verify_success);
-                new ImageToast().show(getApplicationContext(), bitmap, "识别成功" + similarity);
+               // new ImageToast().show(getApplicationContext(), bitmap, "识别成功" + similarity);
 
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     finishFaceVerify(1, "人脸识别成功", silentLivenessScore);

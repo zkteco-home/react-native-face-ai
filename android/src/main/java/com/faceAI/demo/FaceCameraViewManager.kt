@@ -68,26 +68,6 @@ val linearLayout = FrameLayout(reactContext).apply {
 
 
 
-    private fun addCameraFragment(container: FrameLayout, reactContext: ThemedReactContext) {
-        val activity = reactContext.currentActivity as? FragmentActivity ?: return
-        val cameraLensFacing = cameraLens
-        val degree = 0
-
-
-        val cameraXBuilder = CameraXBuilder.Builder()
-                .setCameraLensFacing(cameraLensFacing) //前后摄像头
-                .setLinearZoom(0f)    //焦距范围[0f,1.0f]，参考{@link CameraControl#setLinearZoom(float)}
-                .setRotation(degree)      //画面旋转方向
-                .setSize(CameraXFragment.SIZE.DEFAULT) //相机的分辨率大小。一般默认就可以
-                .create();
-
-        val cameraXFragment = CameraXFragment.newInstance(cameraXBuilder);
-            activity?.supportFragmentManager?.beginTransaction()?.apply {
-                replace(container.id, cameraXFragment)
-                commit()
-            }
-
-    }
 
     override fun onHostResume() {
         Log.d("TestFaceCameraViewManager", "onHostResume")
