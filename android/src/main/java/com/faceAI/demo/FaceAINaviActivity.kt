@@ -11,10 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.ai.face.faceVerify.verify.FaceVerifyUtils
 import com.faceAI.demo.SysCamera.camera.CustomCameraActivity
-import com.faceAI.demo.SysCamera.search.SearchNaviActivity
-import com.faceAI.demo.SysCamera.verify.FaceVerifyWelcomeActivity
-import com.faceAI.demo.SysCamera.verify.LivenessDetectActivity
-import com.faceAI.demo.SysCamera.verify.TwoFaceImageVerifyActivity
+//import com.faceAI.demo.SysCamera.search.SearchNaviActivity
+//import com.faceAI.demo.SysCamera.verify.FaceVerifyWelcomeActivity
+//import com.faceAI.demo.SysCamera.verify.LivenessDetectActivity
+//import com.faceAI.demo.SysCamera.verify.TwoFaceImageVerifyActivity
 import com.faceAI.demo.databinding.ActivityFaceAiNaviBinding
 //import com.tencent.bugly.crashreport.CrashReport
 
@@ -50,60 +50,44 @@ class FaceAINaviActivity : AppCompatActivity() {
 
         //1:1 人脸识别
         viewBinding.faceVerifyCard.setOnClickListener {
-            val enumIntent = Intent(baseContext, FaceVerifyWelcomeActivity::class.java)
-            val bundle = Bundle()
-            bundle.putSerializable(
-                FaceVerifyWelcomeActivity.FACE_VERIFY_DATA_SOURCE_TYPE,
-                FaceVerifyWelcomeActivity.DataSourceType.Android_HAL
-            )
-            enumIntent.putExtras(bundle)
-            startActivity(enumIntent)
         }
 
         // 人脸搜索(系统相机和双目USB UVC 摄像头都支持)
         viewBinding.faceSearch.setOnClickListener {
-            startActivity(Intent(this@FaceAINaviActivity, SearchNaviActivity::class.java))
+           // startActivity(Intent(this@FaceAINaviActivity, SearchNaviActivity::class.java))
         }
 
         // 参数设置
         viewBinding.paramsSetting.setOnClickListener {
-            startActivity(Intent(this@FaceAINaviActivity, FaceAISettingsActivity::class.java))
+          //  startActivity(Intent(this@FaceAINaviActivity, FaceAISettingsActivity::class.java))
         }
 
         // 系统相机自定义调试
         viewBinding.customCamera.setOnClickListener {
-            startActivity(Intent(this@FaceAINaviActivity, CustomCameraActivity::class.java))
+         //   startActivity(Intent(this@FaceAINaviActivity, CustomCameraActivity::class.java))
         }
 
         viewBinding.systemInfo.setOnClickListener {
-            printDeviceInfo()
+          //  printDeviceInfo()
         }
 
 
         //双目摄像头，请确认你的双目UVC摄像头参数符合程序要求
         viewBinding.binocularCamera.setOnClickListener {
-            val uvcCameraModeIntent = Intent(baseContext, FaceVerifyWelcomeActivity::class.java)
-            val bundle = Bundle()
-            bundle.putSerializable(
-                FaceVerifyWelcomeActivity.FACE_VERIFY_DATA_SOURCE_TYPE,
-                FaceVerifyWelcomeActivity.DataSourceType.UVC
-            )
-            uvcCameraModeIntent.putExtras(bundle)
-            startActivity(uvcCameraModeIntent)
-        }
+      }
 
 
         viewBinding.moreAboutMe.setOnClickListener {
-            startActivity(Intent(this@FaceAINaviActivity, AboutFaceAppActivity::class.java))
+           // startActivity(Intent(this@FaceAINaviActivity, AboutFaceAppActivity::class.java))
         }
 
         viewBinding.livenessDetection.setOnClickListener {
-            startActivity(Intent(this@FaceAINaviActivity, LivenessDetectActivity::class.java))
+           // startActivity(Intent(this@FaceAINaviActivity, LivenessDetectActivity::class.java))
         }
 
         //两张静态人脸图中人脸相似度 对比
         viewBinding.twoFaceVerify.setOnClickListener {
-            startActivity(Intent(this@FaceAINaviActivity, TwoFaceImageVerifyActivity::class.java))
+           // startActivity(Intent(this@FaceAINaviActivity, TwoFaceImageVerifyActivity::class.java))
         }
 
         showTipsDialog()

@@ -14,7 +14,7 @@ import com.faceAI.demo.R;
 import com.faceAI.demo.base.AbsBaseActivity;
 
 /**
- * 自定义调试管理摄像头，把SDK 中的源码暴露出来放在 {@link com.faceAI.demo.SysCamera.camera.MyCameraFragment}
+ * 自定义调试管理摄像头，把SDK 中的源码暴露出来放在 {@link MyCameraXFragment}
  *
  */
 public class CustomCameraActivity extends AbsBaseActivity {
@@ -29,7 +29,6 @@ public class CustomCameraActivity extends AbsBaseActivity {
             finish();
         });
 
-
         SharedPreferences sharedPref = getSharedPreferences("FaceAISDK_SP", Context.MODE_PRIVATE);
         int cameraLensFacing = sharedPref.getInt(FRONT_BACK_CAMERA_FLAG, CameraSelector.LENS_FACING_FRONT);
         int degree = sharedPref.getInt( SYSTEM_CAMERA_DEGREE, getWindowManager().getDefaultDisplay().getRotation());
@@ -41,8 +40,7 @@ public class CustomCameraActivity extends AbsBaseActivity {
                 .setRotation(degree)      //画面旋转方向
                 .create();
 
-
-        MyCameraFragment cameraXFragment = MyCameraFragment.newInstance(cameraXBuilder);
+        MyCameraXFragment cameraXFragment = MyCameraXFragment.newInstance(cameraXBuilder);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_camerax, cameraXFragment).commit();
 

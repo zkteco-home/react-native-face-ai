@@ -40,7 +40,9 @@ const COLORS = {
 function App() {
   const [result, setResult] = useState<any>(null);
   const [grantedCamera, setGrantedCamera] = useState(false);
-  const [face, setFace] = useState('');
+  const [enrollFace, setEnrollFace] = useState('');
+  const [verifyFace, setVerifyFace] = useState('');
+
   let colors = COLORS['light'];
   const init = async () => {
     try {
@@ -58,11 +60,22 @@ function App() {
     try {
       const res = await FaceAI.startEnroll();
 
-      setFace(res.face_base64);
+      setEnrollFace(res.face_base64);
     } catch (e) {
       console.error(e);
     }
   };
+
+  const startVerify = async () => {
+    try {
+      const res = await FaceAI.startVerify();
+
+      //setVerifyFace(res.face_base64);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -93,7 +106,6 @@ function App() {
     init();
   }, []);
 
-  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
@@ -116,16 +128,21 @@ function App() {
       </View>
 
       <View style={{ margin: 20 }}>
-        <Button color="#f194ff" title="2. StartEnroll" onPress={startEnroll} />
-        {face && (
+        <Button color="#f194ff" title="2. Start Enroll" onPress={startEnroll} />
+        {enrollFace && (
           <Image
             style={styles.logo}
             source={{
-              uri: face,
+              uri: enrollFace,
             }}
           />
         )}
       </View>
+      <View style={{ margin: 20 }}>
+        <Button color="#f194ff" title="2. Start Verify" onPress={startVerify} />
+      </View>
+
+
     </View>
   );
 }

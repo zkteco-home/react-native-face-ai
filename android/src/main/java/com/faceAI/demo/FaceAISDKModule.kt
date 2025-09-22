@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.faceAI.demo.SysCamera.addFace.AddFaceImageActivity
+import com.faceAI.demo.SysCamera.verify.FaceVerificationActivity
 import androidx.activity.result.ActivityResult
 import com.facebook.react.bridge.BaseActivityEventListener
 import android.os.Bundle
@@ -88,7 +89,7 @@ class FaceAISDKModule(reactContext: ReactApplicationContext) :
         }
     }
 
-    // 启动活体检测
+    // 启动活体登记
     @ReactMethod
     fun startEnroll() {
         Log.d(TAG1, "currentActivity: ")
@@ -103,13 +104,28 @@ class FaceAISDKModule(reactContext: ReactApplicationContext) :
 
     }
 
+    // 启动活体比对
+    @ReactMethod
+    fun startVerify() {
+        Log.d(TAG1, "startVerify: ")
+
+        val activity = currentActivity ?: run {
+            return
+        }
+        //activityResultPromise = promise
+        val intent = Intent(reactContext, FaceVerificationActivity::class.java)
+        activity.startActivityForResult(intent, 1002)
+
+    }
 
 override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?) {
+    
+    Log.d(TAG1, "onActivityResult=========: $requestCode")
+
     if (requestCode == 1001) {
         if (resultCode == Activity.RESULT_OK) {
            // activityResultPromise?.resolve("success")
             val face_base64 = data?.getStringExtra("data")
-            Log.d(TAG1, "onActivityResult=========")
 
             val map = Arguments.createMap().apply {
                         putInt("code", 1)
@@ -133,6 +149,10 @@ override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: 
 
         }
         activityResultPromise = null
+    }
+    else if (requestCode == 1002){
+
+        
     }
 }
 

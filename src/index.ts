@@ -49,13 +49,39 @@ const startEnrollAsync = (
   });
 };
 
-
+const startVerifyAsync = (
+  onSuccess?: (event: any) => void,
+  onFail?: (event: any) => void
+): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const subscription = faceRecognitionEmitter.addListener('Verified', (event:any) => {
+      if (event.code === 1) {
+        onSuccess?.(event);
+        resolve(event);
+      } else if (event.code === 0) {
+        onFail?.(event);
+        reject(event);
+      } else {
+        reject(event);
+      }
+      subscription.remove();
+    });
+    try {
+      FaceAISDK.startVerify();
+    } catch (err) {
+      subscription.remove();
+      reject(err);
+    }
+  });
+};
 export const FaceAI: FaceRecognitionInterface = {
   initializeSDK: (config: InitConfig) => FaceAISDK.initializeSDK(config),
   detectFace: (imagePath: string) => FaceAISDK.detectFace(imagePath),
   addFace: (imagePath: string) => FaceAISDK.addFace(imagePath),
   startEnroll: (onSuccess?: (event: any) => void,
   onFail?: (event: any) => void) => startEnrollAsync(onSuccess,onFail),
+  startVerify: (onSuccess?: (event: any) => void,
+  onFail?: (event: any) => void) => startVerifyAsync(onSuccess,onFail),
 
 };
 
