@@ -267,7 +267,7 @@ public class FaceVerificationActivity extends AbsBaseActivity {
                 switch (actionCode) {
                     // 动作活体检测完成了
                     case ALIVE_DETECT_TYPE_ENUM.ALIVE_CHECK_DONE:
-                        VoicePlayer.getInstance().play(R.raw.face_camera);
+                     //   VoicePlayer.getInstance().play(R.raw.face_camera);
                         tipsTextView.setText(R.string.keep_face_visible);
                         break;
 
@@ -280,18 +280,18 @@ public class FaceVerificationActivity extends AbsBaseActivity {
                         break;
 
                     case ALIVE_DETECT_TYPE_ENUM.OPEN_MOUSE:
-                        VoicePlayer.getInstance().play(R.raw.open_mouse);
+                    //    VoicePlayer.getInstance().play(R.raw.open_mouse);
                         tipsTextView.setText(R.string.repeat_open_close_mouse);
                         break;
 
                     case ALIVE_DETECT_TYPE_ENUM.SMILE: {
                         tipsTextView.setText(R.string.motion_smile);
-                        VoicePlayer.getInstance().play(R.raw.smile);
+                     //   VoicePlayer.getInstance().play(R.raw.smile);
                     }
                     break;
 
                     case ALIVE_DETECT_TYPE_ENUM.BLINK: {
-                        VoicePlayer.getInstance().play(R.raw.blink);
+                    //    VoicePlayer.getInstance().play(R.raw.blink);
                         tipsTextView.setText(R.string.motion_blink_eye);
                     }
                     break;
@@ -302,7 +302,7 @@ public class FaceVerificationActivity extends AbsBaseActivity {
                         break;
 
                     case ALIVE_DETECT_TYPE_ENUM.NOD_HEAD:
-                        VoicePlayer.getInstance().play(R.raw.nod_head);
+                    //    VoicePlayer.getInstance().play(R.raw.nod_head);
                         tipsTextView.setText(R.string.motion_node_head);
                         break;
 
