@@ -68,7 +68,7 @@ function App() {
 
   const startVerify = async () => {
     try {
-      const res = await FaceAI.startVerify();
+      const res = await FaceAI.startVerify(enrollFace);
 
       //setVerifyFace(res.face_base64);
     } catch (e) {

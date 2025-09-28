@@ -24,7 +24,7 @@ export interface FaceRecognitionInterface {
   addFace(imagePath: string): Promise<FaceDetectionResult>;
   startEnroll(onSuccess?: EnrollSuccessCb,
     onFail?: EnrollFailCb): Promise<IEnrollEvent>;
-  startVerify(onSuccess?: EnrollSuccessCb,
+  startVerify(face_data:string,onSuccess?: EnrollSuccessCb,
     onFail?: EnrollFailCb): Promise<IEnrollEvent>;
 
 }

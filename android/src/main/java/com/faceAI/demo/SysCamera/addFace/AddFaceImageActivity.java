@@ -52,7 +52,7 @@ import com.faceAI.demo.FaceSDKConfig;
 import com.faceAI.demo.R;
 import com.faceAI.demo.SysCamera.camera.MyCameraXFragment;
 import com.faceAI.demo.base.AbsBaseActivity;
-
+import com.faceAI.demo.base.utils.BitmapUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

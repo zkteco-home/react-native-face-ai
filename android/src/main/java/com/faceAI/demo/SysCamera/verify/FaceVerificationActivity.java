@@ -4,7 +4,7 @@ import static com.faceAI.demo.FaceSDKConfig.CACHE_BASE_FACE_DIR;
 import static com.faceAI.demo.FaceAISettingsActivity.FRONT_BACK_CAMERA_FLAG;
 import static com.faceAI.demo.FaceAISettingsActivity.SYSTEM_CAMERA_DEGREE;
 import static com.faceAI.demo.FaceSDKConfig.CACHE_FACE_LOG_DIR;
-
+import android.util.Log;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -65,17 +65,18 @@ public class FaceVerificationActivity extends AbsBaseActivity {
     public static final String MOTION_TIMEOUT = "MOTION_TIMEOUT";   //动作活体超时数据
 
     private FaceLivenessType faceLivenessType = FaceLivenessType.SILENT_MOTION;//活体检测类型
-    private String faceID; //你的业务系统中可以唯一定义一个账户的ID，手机号/身份证号等
+    private String faceID="1"; //你的业务系统中可以唯一定义一个账户的ID，手机号/身份证号等
     private float verifyThreshold = 0.85f; //1:1 人脸识别对比通过的阈值
     private float silentLivenessThreshold = 0.85f; //静默活体分数通过的阈值,摄像头成像能力弱的自行调低
     private int motionStepSize = 2; //动作活体的个数
     private int motionTimeOut = 10; //动作超时秒
-
+    private String faceData;
     private final FaceVerifyUtils faceVerifyUtils = new FaceVerifyUtils();
     private TextView tipsTextView, secondTipsTextView, scoreText;
     private DemoFaceCoverView faceCoverView;
     private MyCameraXFragment cameraXFragment;  //摄像头管理源码暴露出来，方便定制开发
-
+    public static final String FACE_DATA_KEY = "FACE_DATA_KEY";           //人脸识别通过的阈值
+    private String TAG1 = "FACEAISDK";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,17 +120,18 @@ public class FaceVerificationActivity extends AbsBaseActivity {
      */
     private void initFaceVerifyEmbedding() {
         //1:1 人脸对比，摄像头实时采集的人脸和预留的人脸底片对比。（动作活体人脸检测完成后开始1:1比对）
-        float[] faceEmbedding = FaceEmbedding.loadEmbedding(getBaseContext(), faceID);
+        //float[] faceEmbedding = FaceEmbedding.loadEmbedding(getBaseContext(), faceID);
         // 去Path 路径读取有没有faceID 对应的处理好的人脸Bitmap
-        String faceFilePath = CACHE_BASE_FACE_DIR + faceID;
-        Bitmap baseBitmap = BitmapFactory.decodeFile(faceFilePath);
-
+       // String faceFilePath = CACHE_BASE_FACE_DIR + faceID;
+       // Bitmap baseBitmap = BitmapFactory.decodeFile(faceFilePath);
+        Bitmap baseBitmap = BitmapUtils.base64ToBitmap(faceData);
         //本地没有faceID对应的人脸特征向量 （ 本段代码仅供演示，你需要根据自身业务完善流程）
-        if (faceEmbedding.length == 0) {
+
+        //if (faceEmbedding.length == 0) {
             disposeBaseBitmapGetEmbedding(baseBitmap);
-        } else {
-            initFaceVerificationParam(faceEmbedding);
-        }
+        //} else {
+         //   initFaceVerificationParam(faceEmbedding);
+       // }
 
         Glide.with(getBaseContext())
                 .load(baseBitmap)
@@ -168,7 +170,8 @@ public class FaceVerificationActivity extends AbsBaseActivity {
                      */
                     @Override
                     public void onVerifyMatched(boolean isMatched, float similarity, float silentLivenessScore, Bitmap bitmap) {
-                        showVerifyResult(isMatched, similarity, silentLivenessScore, bitmap);
+                        finishFaceVerify(1,"Verify success");
+                      //  showVerifyResult(isMatched, similarity, silentLivenessScore, bitmap);
                     }
 
                     //人脸识别，活体检测过程中的各种提示
@@ -185,7 +188,8 @@ public class FaceVerificationActivity extends AbsBaseActivity {
                     //发送严重错误，会中断业务流程
                     @Override
                     public void onFailed(int code, String message) {
-                        Toast.makeText(getBaseContext(), "onFailed错误!：" + message, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getBaseContext(), "onFailed错误!：" + message, Toast.LENGTH_LONG).show();
+                         finishFaceVerify(0,"Verify failed");
                     }
 
                 }).create();
@@ -394,16 +398,16 @@ public class FaceVerificationActivity extends AbsBaseActivity {
         //需要你把以前版本的人脸bitmap 转变为faceEmbedding
         if (baseBitmap != null) {
             //如果是经过FaceAISDK 裁剪处理过的人脸处理更简单
-            float[] embedding = new BaseImageDispose().saveBaseImageGetEmbedding(baseBitmap, CACHE_BASE_FACE_DIR, faceID);
-            FaceEmbedding.saveEmbedding(getBaseContext(), faceID, embedding);  //本地保存起来
-            initFaceVerificationParam(embedding);
+           // float[] embedding = new BaseImageDispose().saveBaseImageGetEmbedding(baseBitmap, CACHE_BASE_FACE_DIR, faceID);
+           // FaceEmbedding.saveEmbedding(getBaseContext(), faceID, embedding);  //本地保存起来
+           // initFaceVerificationParam(embedding);
 
             //非FaceAI SDK录入处理的人脸可能不规范的没有经过矫正裁剪需要合规化处理
             FaceAIUtils.Companion.getInstance(getApplication())
                     .disposeBaseFaceImage(getBaseContext(), baseBitmap, new FaceAIUtils.Callback() {
                         @Override
                         public void onSuccess(@NonNull Bitmap disposedBitmap, @NonNull float[] faceEmbedding) {
-                            FaceEmbedding.saveEmbedding(getBaseContext(), faceID, faceEmbedding); //本地保存起来
+                           // FaceEmbedding.saveEmbedding(getBaseContext(), faceID, faceEmbedding); //本地保存起来
                             initFaceVerificationParam(faceEmbedding);
                         }
 
@@ -464,6 +468,12 @@ public class FaceVerificationActivity extends AbsBaseActivity {
             if (intent.hasExtra(SILENT_THRESHOLD_KEY)) {
                 motionTimeOut = intent.getIntExtra(MOTION_TIMEOUT, 10);
             }
+            if (intent.hasExtra(FACE_DATA_KEY)) {
+                faceData = intent.getStringExtra(FACE_DATA_KEY);
+                Log.d(TAG1,"faceData"+faceData);
+            }
+
+
         } else {
             // 数据不存在，执行其他操作
         }

@@ -106,14 +106,17 @@ class FaceAISDKModule(reactContext: ReactApplicationContext) :
 
     // 启动活体比对
     @ReactMethod
-    fun startVerify() {
+    fun startVerify(face_data:String) {
         Log.d(TAG1, "startVerify: ")
 
         val activity = currentActivity ?: run {
             return
         }
         //activityResultPromise = promise
-        val intent = Intent(reactContext, FaceVerificationActivity::class.java)
+        val intent = Intent(reactContext, FaceVerificationActivity::class.java).apply {
+               putExtra(FaceVerificationActivity.FACE_DATA_KEY, 
+                         face_data)
+        }
         activity.startActivityForResult(intent, 1002)
 
     }
@@ -151,7 +154,18 @@ override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: 
         activityResultPromise = null
     }
     else if (requestCode == 1002){
+        if (resultCode == Activity.RESULT_OK) {
+            val map = Arguments.createMap().apply {
+                        putInt("code", 1)
+                        putString("result", "success")
+                       // putString("face_base64",face_base64)
+                }
+                  //  promise.resolve(map)
+                    
+                   // Log.d(TAG1, "sendEvent:$face_base64")
 
+                    sendEvent("Verified", map)
+            }
         
     }
 }

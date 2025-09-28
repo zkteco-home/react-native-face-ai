@@ -50,6 +50,7 @@ const startEnrollAsync = (
 };
 
 const startVerifyAsync = (
+  face_data:string,
   onSuccess?: (event: any) => void,
   onFail?: (event: any) => void
 ): Promise<any> => {
@@ -67,7 +68,7 @@ const startVerifyAsync = (
       subscription.remove();
     });
     try {
-      FaceAISDK.startVerify();
+      FaceAISDK.startVerify(face_data);
     } catch (err) {
       subscription.remove();
       reject(err);
@@ -80,8 +81,8 @@ export const FaceAI: FaceRecognitionInterface = {
   addFace: (imagePath: string) => FaceAISDK.addFace(imagePath),
   startEnroll: (onSuccess?: (event: any) => void,
   onFail?: (event: any) => void) => startEnrollAsync(onSuccess,onFail),
-  startVerify: (onSuccess?: (event: any) => void,
-  onFail?: (event: any) => void) => startVerifyAsync(onSuccess,onFail),
+  startVerify: (face_data:string,onSuccess?: (event: any) => void,
+  onFail?: (event: any) => void) => startVerifyAsync(face_data,onSuccess,onFail),
 
 };
 
