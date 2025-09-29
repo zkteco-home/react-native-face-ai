@@ -17,6 +17,7 @@ const faceRecognitionEmitter = new NativeEventEmitter(FaceAISDK);
 
 
 const startEnrollAsync = (
+  format?:'jpg'|'png',
   onSuccess?: (event: any) => void,
   onFail?: (event: any) => void
 ): Promise<any> => {
@@ -34,7 +35,7 @@ const startEnrollAsync = (
       subscription.remove();
     });
     try {
-      FaceAISDK.startEnroll();
+      FaceAISDK.startEnroll(format);
     } catch (err) {
       subscription.remove();
       reject(err);
@@ -72,8 +73,8 @@ export const FaceAI: FaceRecognitionInterface = {
   initializeSDK: (config: InitConfig) => FaceAISDK.initializeSDK(config),
   detectFace: (imagePath: string) => FaceAISDK.detectFace(imagePath),
   addFace: (imagePath: string) => FaceAISDK.addFace(imagePath),
-  startEnroll: (onSuccess?: (event: any) => void,
-  onFail?: (event: any) => void) => startEnrollAsync(onSuccess,onFail),
+  startEnroll: (format?:'jpg'|'png',onSuccess?: (event: any) => void,
+  onFail?: (event: any) => void) => startEnrollAsync(format,onSuccess,onFail),
   startVerify: (face_data:string,onSuccess?: (event: any) => void,
   onFail?: (event: any) => void) => startVerifyAsync(face_data,onSuccess,onFail),
 

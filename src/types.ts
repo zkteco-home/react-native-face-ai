@@ -22,7 +22,7 @@ export interface FaceRecognitionInterface {
   initializeSDK(config: InitConfig): Promise<string>;
   detectFace(imagePath: string): Promise<FaceDetectionResult>;
   addFace(imagePath: string): Promise<FaceDetectionResult>;
-  startEnroll(onSuccess?: EnrollSuccessCb,
+  startEnroll(format?:'jpg'|'png',onSuccess?: EnrollSuccessCb,
     onFail?: EnrollFailCb): Promise<IEnrollEvent>;
   startVerify(face_data:string,onSuccess?: EnrollSuccessCb,
     onFail?: EnrollFailCb): Promise<IEnrollEvent>;

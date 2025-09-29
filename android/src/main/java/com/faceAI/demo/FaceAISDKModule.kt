@@ -91,7 +91,7 @@ class FaceAISDKModule(reactContext: ReactApplicationContext) :
 
     // 启动活体登记
     @ReactMethod
-    fun startEnroll() {
+    fun startEnroll(format:string) {
         Log.d(TAG1, "currentActivity: ")
 
         val activity = currentActivity ?: run {
@@ -99,7 +99,9 @@ class FaceAISDKModule(reactContext: ReactApplicationContext) :
             return
         }
         //activityResultPromise = promise
-        val intent = Intent(reactContext, AddFaceImageActivity::class.java)
+        val intent = Intent(reactContext, AddFaceImageActivity::class.java).apply {
+                putExtra("FACE_RESULT_FORMAT", format)
+        }
         activity.startActivityForResult(intent, 1001)
 
     }
