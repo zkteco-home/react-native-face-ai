@@ -12,9 +12,9 @@ class FaceAISDKPackage : ReactPackage {
     return listOf<NativeModule>(FaceAISDKModule(reactContext))
   }
 
-  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf(FaceCameraViewManager(reactContext))
-  }
+    override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
+        return emptyList()
+        }
 
 
 }

@@ -1,4 +1,4 @@
-import { NativeModules, NativeEventEmitter,requireNativeComponent,UIManager } from 'react-native';
+import { NativeModules, NativeEventEmitter } from 'react-native';
 import type { FaceRecognitionInterface, InitConfig, FaceDetectionResult } from './types';
 
  const LINKING_ERROR =
@@ -11,13 +11,6 @@ type FaceAISDKProps = {
   livenessLevel: number;
 };
 
-const ComponentName = 'FaceAICameraView';
-export const FaceAISDKView =
-  UIManager.getViewManagerConfig(ComponentName) != null
-    ? requireNativeComponent<FaceAISDKProps>(ComponentName)
-    : () => {
-        throw new Error(LINKING_ERROR);
-      };
 
 const { FaceAISDK } = NativeModules;
 const faceRecognitionEmitter = new NativeEventEmitter(FaceAISDK);
