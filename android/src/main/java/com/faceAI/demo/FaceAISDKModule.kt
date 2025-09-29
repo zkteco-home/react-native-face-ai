@@ -143,9 +143,11 @@ override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: 
 
 
         } else {
+
             val map = Arguments.createMap().apply {
                         putInt("code", 0)
                         putString("result", "fail")
+                    
                 }
 
                 sendEvent("Enrolled", map)
@@ -155,17 +157,26 @@ override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: 
     }
     else if (requestCode == 1002){
         if (resultCode == Activity.RESULT_OK) {
+            val face_base64 = data?.getStringExtra("data")
+
             val map = Arguments.createMap().apply {
                         putInt("code", 1)
                         putString("result", "success")
-                       // putString("face_base64",face_base64)
+                        putString("face_base64",face_base64)
                 }
-                  //  promise.resolve(map)
+            sendEvent("Verified", map)
+        }
+        else {
+            val map = Arguments.createMap().apply {
+                        putInt("code", 0)
+                        putString("result", "fail")
                     
-                   // Log.d(TAG1, "sendEvent:$face_base64")
+                }
 
-                    sendEvent("Verified", map)
-            }
+                sendEvent("Verified", map)
+
+        }
+
         
     }
 }

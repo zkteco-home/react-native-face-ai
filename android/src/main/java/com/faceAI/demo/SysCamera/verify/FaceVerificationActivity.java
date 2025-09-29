@@ -170,7 +170,18 @@ public class FaceVerificationActivity extends AbsBaseActivity {
                      */
                     @Override
                     public void onVerifyMatched(boolean isMatched, float similarity, float silentLivenessScore, Bitmap bitmap) {
-                        finishFaceVerify(1,"Verify success");
+                        String bitmap_base64 = BitmapUtils.bitmap2Base64(bitmap);
+                        Intent intent = new Intent().putExtra("code", 1)
+                            .putExtra("faceID", 1)
+                            .putExtra("msg", "success")
+                            .putExtra("silentLiveValue", similarity)
+                            .putExtra("silentLivenessScore", silentLivenessScore)
+
+                            .putExtra("data", bitmap_base64);
+
+                        setResult(RESULT_OK, intent);
+                        finish();
+
                       //  showVerifyResult(isMatched, similarity, silentLivenessScore, bitmap);
                     }
 

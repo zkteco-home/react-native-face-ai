@@ -70,12 +70,11 @@ function App() {
     try {
       const res = await FaceAI.startVerify(enrollFace);
 
-      //setVerifyFace(res.face_base64);
+      setVerifyFace(res.face_base64);
     } catch (e) {
       console.error(e);
     }
   };
-
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -105,7 +104,6 @@ function App() {
     requestCameraPermission();
     init();
   }, []);
-
 
   return (
     <View style={styles.container}>
@@ -140,9 +138,15 @@ function App() {
       </View>
       <View style={{ margin: 20 }}>
         <Button color="#f194ff" title="2. Start Verify" onPress={startVerify} />
+        {verifyFace && (
+          <Image
+            style={styles.logo}
+            source={{
+              uri: verifyFace,
+            }}
+          />
+        )}
       </View>
-
-
     </View>
   );
 }
